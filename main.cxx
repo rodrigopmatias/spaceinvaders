@@ -23,7 +23,8 @@ int main(int argc, char ** argv) {
     return -3;
   }
 
-  std::thread();
+  std::thread tickerThread(ticker, window);
+  std::thread statusThread(statusLog, window);
 
   glfwMakeContextCurrent(window);
   glfwSetKeyCallback(window, keyboardCallback);
@@ -34,8 +35,13 @@ int main(int argc, char ** argv) {
     renderWorld(window);
 
     glfwSwapBuffers(window);
+    frameCount++;
+
     glfwPollEvents();
   }
+
+  tickerThread.join();
+  statusThread.join();
 
   glfwTerminate();
 
@@ -48,11 +54,11 @@ void keyboardCallback(GLFWwindow * window, int key, int scancode, int action, in
     glfwSetWindowShouldClose(window, GL_TRUE);
   else {
     std::cout << "key => " << key;
-    std::cout << " | ";
+    std::cout << "; ";
     std::cout << "scancode => " << scancode;
-    std::cout << " | ";
+    std::cout << "; ";
     std::cout << "action => " << action;
-    std::cout << " | ";
+    std::cout << "; ";
     std::cout << "mode => " << mode;
     std::cout << std::endl;
   }
@@ -94,4 +100,25 @@ void renderWorld(GLFWwindow * window) {
 
 void framebufferSizeCallback(GLFWwindow * window, int width, int height) {
   glViewport(0, 0, width, height);
+}
+
+void ticker(GLFWwindow * window) {
+  while(!glfwWindowShouldClose(window)) {
+    auto start_time = std::chrono::steady_clock::now();
+    auto end_time = start_time + frame_duration(100);
+
+    // renderWorld(window);
+    std::this_thread::sleep_until(end_time);
+  }
+}
+
+void statusLog(GLFWwindow * window) {
+  while(!glfwWindowShouldClose(window)) {
+    auto start_time = std::chrono::steady_clock::now();
+    auto end_time = start_time + frame_duration(1000);
+
+    std::cout << "rate: \033[1m\033[32m" << frameCount << "\033[0m fps" << std::endl;
+    frameCount = 0;
+    std::this_thread::sleep_until(end_time);
+  }
 }

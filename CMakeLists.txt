@@ -4,6 +4,8 @@ project(spi)
 
 set(CMAKE_CXX_FLAGS "-std=c++11")
 
+find_library(Threads REQUIRED)
+
 add_executable(spi
   main.cxx
   game/object.cxx
@@ -16,6 +18,9 @@ add_executable(spi
   game/enemy/darbi.cxx
   game/enemy/morbi.cxx)
 
-find_library(Threads REQUIRED)
-
-target_link_libraries(${CMAKE_PROJECT_NAME} glfw GLEW GLU GL ${CMAKE_THREAD_LIB_INIT})
+target_link_libraries(${CMAKE_PROJECT_NAME}
+  glfw
+  GLEW
+  GLU
+  GL
+  pthread)

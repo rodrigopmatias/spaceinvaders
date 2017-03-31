@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.5)
 
 project(spi)
 
+set(CMAKE_CXX_FLAGS "-std=c++11")
+
 add_executable(spi
   main.cxx
   game/object.cxx
@@ -16,4 +18,4 @@ add_executable(spi
 
 find_library(Threads REQUIRED)
 
-target_link_libraries(${CMAKE_PROJECT_NAME} glut GLU GL ${CMAKE_THREAD_LIB_INIT})
+target_link_libraries(${CMAKE_PROJECT_NAME} glfw GLEW GLU GL ${CMAKE_THREAD_LIB_INIT})

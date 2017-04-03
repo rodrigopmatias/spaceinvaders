@@ -14,18 +14,17 @@ void GameBullet::draw(void) const {
 
   glBegin(GL_LINES);
   glColor3f(1.0, 0.8, 0.0);
+  glVertex2f(-2, -90);
   glVertex2f(-2, -85);
-  glVertex2f(-2, -80);
+  glVertex2f(2, -90);
   glVertex2f(2, -85);
-  glVertex2f(2, -80);
   glEnd();
 }
 
 void GameBullet::turn(void) {
-  this->_vPosition += 5;
-  this->destroied = (this->_vPosition >= (95 + 80));
+  this->_vPosition += 1.5f;
+  this->destroied = (this->_vPosition >= 185);
 }
-
 
 bool GameBullet::isDestroied(void) const {
   return this->destroied;

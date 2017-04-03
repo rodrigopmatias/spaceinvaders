@@ -64,7 +64,7 @@ void keyboardCallback(GLFWwindow * window, int key, int scancode, int action, in
     world->turnRight();
   else if(key == GLFW_KEY_SPACE && (action == GLFW_PRESS || action == 2))
     world->turnFire();
-  else {
+  else if(action != 0){
     std::cout << "key => " << key;
     std::cout << "; ";
     std::cout << "scancode => " << scancode;

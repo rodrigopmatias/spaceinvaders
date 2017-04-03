@@ -6,8 +6,8 @@ GameAircraft::GameAircraft(void) {
 }
 
 void GameAircraft::turn(void) {
-  this->dH = (this->dH < 3.0f ? this->dH : 3.0f);
-  this->dH = (this->dH > -3.0f ? this->dH : -3.0f);
+  this->dH = (this->dH < 1.0f ? this->dH : 1.0f);
+  this->dH = (this->dH > -1.0f ? this->dH : -1.0f);
 
   this->_hPosition += this->dH;
   if(this->_hPosition > 88.0f) {
@@ -74,15 +74,9 @@ void GameAircraft::draw(void) const {
   }
 }
 
-void GameAircraft::moveLeft(void) {
-  this->dH -= 1.0;
-  std::cout << "Aircraft turn LEFT(" << this->dH << ")" << std::endl;
-}
+void GameAircraft::moveLeft(void) { this->dH = -1.0; }
 
-void GameAircraft::moveRight(void) {
-  this->dH += 1.0;
-  std::cout << "Aircraft turn RIGHT(" << this->dH << ")" << std::endl;
-}
+void GameAircraft::moveRight(void) { this->dH = 1.0; }
 
 void GameAircraft::fire(void) {
   for(char i = 0; i < AIRCRAFT_MAX_BULLETS; i++) {

@@ -8,11 +8,12 @@
 #include <thread>
 #include <chrono>
 
+#include "game/world.hxx"
+
 typedef std::chrono::duration<int, std::ratio<1, 1000>> frame_duration;
 
 void framebufferSizeCallback(GLFWwindow * window, int width, int height);
 void keyboardCallback(GLFWwindow * window, int key, int scancode, int action, int mode);
-void renderWorld(GLFWwindow * window);
 void statusLog(GLFWwindow * window);
 
 void ticker(GLFWwindow * window);

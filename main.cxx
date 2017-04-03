@@ -1,5 +1,7 @@
 #include "main.hxx"
 
+GameWorld * world;
+
 int main(int argc, char ** argv) {
   GLFWwindow * window;
 
@@ -29,10 +31,13 @@ int main(int argc, char ** argv) {
   glfwMakeContextCurrent(window);
   glfwSetKeyCallback(window, keyboardCallback);
 
+  world = new GameWorld(window);
+
   while(!glfwWindowShouldClose(window)) {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    renderWorld(window);
+    world->turn();
+    world->draw();
 
     glfwSwapBuffers(window);
     frameCount++;
@@ -43,6 +48,7 @@ int main(int argc, char ** argv) {
   tickerThread.join();
   statusThread.join();
 
+  delete world;
   glfwTerminate();
 
   return 0;
@@ -52,6 +58,12 @@ void keyboardCallback(GLFWwindow * window, int key, int scancode, int action, in
 
   if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS && mode == 0)
     glfwSetWindowShouldClose(window, GL_TRUE);
+  else if(key == GLFW_KEY_LEFT && (action == GLFW_PRESS || action == 2))
+    world->turnLeft();
+  else if(key == GLFW_KEY_RIGHT && (action == GLFW_PRESS || action == 2))
+    world->turnRight();
+  else if(key == GLFW_KEY_SPACE && (action == GLFW_PRESS || action == 2))
+    world->turnFire();
   else {
     std::cout << "key => " << key;
     std::cout << "; ";
@@ -63,39 +75,8 @@ void keyboardCallback(GLFWwindow * window, int key, int scancode, int action, in
     std::cout << std::endl;
   }
 
-  renderWorld(window);
-}
-
-void renderWorld(GLFWwindow * window) {
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(-100, 100, -100, 100, -100, 100);
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  glBegin(GL_QUADS);
-  glColor3f(0.9f, 0.9f, 0.0f);
-  glVertex2f(-0.5, -70.0);
-  glVertex2f(0.5, -70.0);
-  glVertex2f(0.5, -65.0);
-  glVertex2f(-0.5, -65.0);
-  glEnd();
-
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(-100, 100, -100, 100, -100, 100);
-
-  glTranslatef(50.0f, 0.0f, 0.0f);
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  glBegin(GL_QUADS);
-  glColor3f(0.5f, 0.0f, 0.0f);
-  glVertex2f(-10.0, -90.0);
-  glVertex2f(10.0, -90.0);
-  glVertex2f(10.0, -80.0);
-  glVertex2f(-10.0, -80.0);
-  glEnd();
+  if(world)
+    world->draw();
 }
 
 void framebufferSizeCallback(GLFWwindow * window, int width, int height) {
@@ -106,8 +87,6 @@ void ticker(GLFWwindow * window) {
   while(!glfwWindowShouldClose(window)) {
     auto start_time = std::chrono::steady_clock::now();
     auto end_time = start_time + frame_duration(100);
-
-    // renderWorld(window);
     std::this_thread::sleep_until(end_time);
   }
 }

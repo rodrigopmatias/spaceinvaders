@@ -5,6 +5,12 @@ GameAircraft::GameAircraft(void) {
     this->bullets[i] = 0;
 }
 
+GameAircraft::~GameAircraft(void) {
+  for(char i = 0; i < AIRCRAFT_MAX_BULLETS; i++)
+    if(this->bullets[i])
+      delete this->bullets[i];
+}
+
 void GameAircraft::turn(void) {
   this->dH = (this->dH < 3.0f ? this->dH : 3.0f);
   this->dH = (this->dH > -3.0f ? this->dH : -3.0f);

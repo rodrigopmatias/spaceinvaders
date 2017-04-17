@@ -17,6 +17,7 @@ private:
   GameBullet * bullets[AIRCRAFT_MAX_BULLETS];
 public:
   GameAircraft(void);
+  ~GameAircraft(void);
 
   void draw(void) const;
 
